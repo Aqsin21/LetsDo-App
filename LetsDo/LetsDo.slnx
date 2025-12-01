@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="LetsDo.API/LetsDo.API.csproj" />
+  <Project Path="LetsDo.BLL/LetsDo.BLL.csproj" />
+  <Project Path="LetsDo.DAL/LetsDo.DAL.csproj" />
+</Solution>

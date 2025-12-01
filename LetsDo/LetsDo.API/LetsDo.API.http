@@ -1,0 +1,6 @@
+@LetsDo.API_HostAddress = http://localhost:5287
+
+GET {{LetsDo.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
