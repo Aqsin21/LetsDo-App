@@ -42,27 +42,29 @@ namespace LetsDo.API.Controllers
             {
                 Name = dto.Name,
                 Icon = dto.Icon
-                // Id = Guid.NewGuid() otomatik zaten
+               
             };
             await _categoryService.CreateAsync(category);
             return Ok(category);
 
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody]Category category)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCategoryDto dto)
         {
-            if (id != category.Id)
-                return BadRequest("ID in URL and body must match.");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var exists = await _categoryService.AnyAsync(x => x.Id == id);
-            if (!exists)
-                return NotFound();
+            var category = await _categoryService.GetByIdAsync(id);
 
-            var updated = await _categoryService.UpdateAsync(category);
-            return Ok(updated);
+            if (category == null)
+                return NotFound();
+            category.Name = dto.Name;
+            category.Icon = dto.Icon;
+            await _categoryService.UpdateAsync(category);
+            return Ok(category);
+
+
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
