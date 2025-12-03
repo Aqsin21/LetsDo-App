@@ -11,10 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\LetsDo.BLL\LetsDo.BLL.csproj" />
     <ProjectReference Include="..\LetsDo.DAL\LetsDo.DAL.csproj" />
   </ItemGroup>
 

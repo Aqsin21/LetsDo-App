@@ -104,11 +104,9 @@ namespace LetsDo.DAL.Migrations
 
             modelBuilder.Entity("LetsDo.DAL.DataContext.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Icon")
                         .HasColumnType("nvarchar(max)");
@@ -124,17 +122,12 @@ namespace LetsDo.DAL.Migrations
 
             modelBuilder.Entity("LetsDo.DAL.DataContext.Entities.Event", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("CategoryId1")
-                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -155,7 +148,7 @@ namespace LetsDo.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId1");
+                    b.HasIndex("CategoryId");
 
                     b.HasIndex("OrganizerId");
 
@@ -297,7 +290,7 @@ namespace LetsDo.DAL.Migrations
                 {
                     b.HasOne("LetsDo.DAL.DataContext.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId1")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

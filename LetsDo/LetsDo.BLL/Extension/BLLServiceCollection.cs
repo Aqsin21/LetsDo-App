@@ -1,16 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using LetsDo.BLL.Services.Abstract;
+using LetsDo.BLL.Services.Concrete;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace LetsDo.BLL.Extension
 {
     public static class BLLServiceCollection
     {
-     
+       public static IServiceCollection AddBll(this IServiceCollection services)
+        {
+            services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+            services.AddScoped<IEventService, EventService>();
+            return services;
+        }
     }
 
 }
