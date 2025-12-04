@@ -1,4 +1,5 @@
-﻿using LetsDo.BLL.Services.Abstract;
+﻿using LetsDo.API.Dtos.Event;
+using LetsDo.BLL.Services.Abstract;
 using LetsDo.DAL.DataContext.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ namespace LetsDo.API.Controllers
     public class EventsController : ControllerBase
     {
         private readonly IGenericService<Event> _eventService;
+
 
         public EventsController(IGenericService<Event> eventService)
         {
@@ -27,7 +29,6 @@ namespace LetsDo.API.Controllers
                 filter = e => e.EventDate >= afterDate.Value;
 
             var includes = new List<Expression<Func<Event, object>>>();
-            if (withOrganizer) includes.Add(e => e.Organizer);
             if (withCategory) includes.Add(e => e.Category);
 
             var events = await _eventService.GetAllAsync(
@@ -49,21 +50,28 @@ namespace LetsDo.API.Controllers
             return ev == null ? NotFound() : Ok(ev);
         }
 
-        // POST: api/events
+       
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] Event newEvent)
+        public async Task<IActionResult> Create([FromBody] CreateEventDto dto)
         {
-            if (!ModelState.IsValid)
+            if(!ModelState.IsValid)
                 return BadRequest(ModelState);
+            
+            var newEvent = new Event 
+            { 
+                Title = dto.Title,
+                Description = dto.Description,
+                EventDate = dto.EventDate.ToUniversalTime(), 
+                MaxParticipants = dto.MaxParticipants,
+                OrganizerId = dto.OrganizerId
+            };
 
-            // OrganizerId’yi login olan kullanıcıdan alırsın (örnek)
-            // newEvent.OrganizerId = User.GetUserId();
+            await _eventService.CreateAsync(newEvent);
+            return Ok(newEvent);
 
-            var created = await _eventService.CreateAsync(newEvent);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
-        
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Guid id, [FromBody] Event updatedEvent)
         {
