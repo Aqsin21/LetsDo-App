@@ -43,7 +43,17 @@ namespace LetsDo.API.Controllers
 
             });
         }
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginDto dto)
+        {
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null) return Unauthorized("Invalid Email or Password");
+            var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
+            if (!result.Succeeded) return Unauthorized("Invalid Email or Password");
+            var token = _tokenService.CreateToken(user);
+            return Ok(new {token});
 
+        }
 
     }
 }
